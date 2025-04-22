@@ -49,52 +49,36 @@ jobs:
       - name: Build and test with Maven
 
         run: mvn clean test
+        
 
-        - name: List generated Extent Report
+      
+      - name: Build and test with Maven
+        run: mvn clean test
 
+      - name: List generated Extent Report
         run: |
-
           echo "Listing files in target directory:"
-
           ls -la "${{ github.workspace }}/target"
- 
+
       - name: Send email notification
-
-        if: failure()  # Only runs if previous steps fail
-
+        if: failure()
         uses: dawidd6/action-send-mail@v3
-
         with:
-
           server_address: smtp.gmail.com
-
           server_port: 587
-
           username: ${{ secrets.GMAIL_USERNAME }}
-
           password: ${{ secrets.GMAIL_PASSWORD }}
-
-          subject: " Test Failed - Extent Report Attached"
-
+          subject: "Test Failed - Extent Report Attached"
           body: |
-
             Hello Developer,
- 
+
             One or more tests have failed during the GitHub Actions workflow.
 
             Please review the attached Extent Report for more information.
- 
-            Regards,
 
+            Regards,  
             GitHub Actions
-
           to: ${{ secrets.DEVELOPER_EMAIL }}
-
           from: ${{ secrets.GMAIL_USERNAME }}
-
           attachments: |
-
             ${{ github.workspace }}/target/ExtentReport.html
-
- 
- 
