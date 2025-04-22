@@ -108,53 +108,48 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-
+     - name: Cache Maven packages
+  uses: actions/cache@v3
+  with:
+    path: ~/.m2/repository
+    key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+    restore-keys: ${{ runner.os }}-maven-
 
-      - name: Build and test with Maven
-        run: mvn clean test
+- name: Build and test with Maven
+  run: mvn clean test
 
-      # Make sure this step runs even if tests fail
-      - name: List generated Extent Report
-        if: always()
-        run: |
-          echo "Listing files in ExtentReports directory:"
-          ls -la "${{ github.workspace }}/target/ExtentReports"
+- name: List generated Extent Report
+  if: always()
+  run: |
+    echo "Listing files in ExtentReports directory:"
+    ls -la "${{ github.workspace }}/target/ExtentReports"
 
-      # Optional: Check if report exists (nice for debugging)
-      - name: Check if report exists
-        if: always()
-        run: |
-          if [ -f "${{ github.workspace }}/target/ExtentReports/ExtentReport.html" ]; then
-            echo " Extent Report found!"
-          else
-            echo " Extent Report not found!"
-          fi
+- name: Check if report exists
+  if: always()
+  run: |
+    if [ -f "${{ github.workspace }}/target/ExtentReports/ExtentReport.html" ]; then
+      echo "✅ Extent Report found!"
+    else
+      echo "❌ Extent Report not found!"
+    fi
 
-      #  Send email only if test failed
-      - name: Send email notification
-        if: failure()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          username: ${{ secrets.GMAIL_USERNAME }}
-          password: ${{ secrets.GMAIL_PASSWORD }}
-          subject: "Test Failed - Extent Report Attached"
-          body: |
-            Hello Developer,
+- name: Send email notification
+  if: failure()
+  uses: dawidd6/action-send-mail@v3
+  with:
+    server_address: smtp.gmail.com
+    server_port: 587
+    username: ${{ secrets.GMAIL_USERNAME }}
+    password: ${{ secrets.GMAIL_PASSWORD }}
+    subject: "Test Failed - Extent Report Attached"
+    body: |
+      Hello Developer,
 
-            One or more tests have failed during the GitHub Actions workflow.
+      One or more tests have failed during the GitHub Actions workflow.
+      Please review the attached Extent Report for more information.
 
-            Please review the attached Extent Report for more information.
-
-            Regards,  
-            GitHub Actions
-          to: ${{ secrets.DEVELOPER_EMAIL }}
-          from: ${{ secrets.GMAIL_USERNAME }}
-          attachments: |
-            ${{ github.workspace }}/target/ExtentReports/ExtentReport.html
+      Regards,  
+      GitHub Actions
+    to: ${{ secrets.DEVELOPER_EMAIL }}
+    from: ${{ secrets.GMAIL_USERNAME }}
+    attachments: ${{ github.workspace }}/target/ExtentReports/ExtentReport.html
