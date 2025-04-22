@@ -118,11 +118,24 @@ jobs:
       - name: Build and test with Maven
         run: mvn clean test
 
+      # Make sure this step runs even if tests fail
       - name: List generated Extent Report
+        if: always()
         run: |
           echo "Listing files in ExtentReports directory:"
           ls -la "${{ github.workspace }}/target/ExtentReports"
 
+      # Optional: Check if report exists (nice for debugging)
+      - name: Check if report exists
+        if: always()
+        run: |
+          if [ -f "${{ github.workspace }}/target/ExtentReports/ExtentReport.html" ]; then
+            echo " Extent Report found!"
+          else
+            echo " Extent Report not found!"
+          fi
+
+      #  Send email only if test failed
       - name: Send email notification
         if: failure()
         uses: dawidd6/action-send-mail@v3
@@ -145,4 +158,3 @@ jobs:
           from: ${{ secrets.GMAIL_USERNAME }}
           attachments: |
             ${{ github.workspace }}/target/ExtentReports/ExtentReport.html
-
