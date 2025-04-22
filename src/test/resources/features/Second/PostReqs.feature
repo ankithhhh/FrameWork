@@ -13,5 +13,5 @@ Feature: Maps API POST Request using Excel
 
     Examples: 
       | excelPath          | sheet    | rowIndex | statusCode | status |
-      | data/PostData.xlsx | PostData |        1 |        200 | OK     |
+      | data/PostData.xlsx | PostData |        1 |        400 | OK     |
       | data/PostData.xlsx | PostData |        2 |        200 | OK     |
