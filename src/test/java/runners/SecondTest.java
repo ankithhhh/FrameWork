@@ -5,11 +5,7 @@ import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
 
 @CucumberOptions(
-    features = {
-        "src/test/resources/features/Second/PostReqs.feature",
-        "src/test/resources/features/Second/GetReqs.feature"
-        // Add others here if needed
-    },
+    features = {"src/test/resources/features/Second"},
     glue = {"steps", "hooks"},
     plugin = {
         "pretty",
@@ -19,7 +15,6 @@ import org.testng.annotations.DataProvider;
     publish = true
 )
 public class SecondTest extends AbstractTestNGCucumberTests {
-
     @Override
     @DataProvider(parallel = true)
     public Object[][] scenarios() {
