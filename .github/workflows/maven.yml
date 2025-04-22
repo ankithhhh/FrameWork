@@ -81,4 +81,4 @@ jobs:
           to: ${{ secrets.DEVELOPER_EMAIL }}
           from: ${{ secrets.GMAIL_USERNAME }}
           attachments: |
-            ${{ github.workspace }}/target/ExtentReports/ExtentReport.html
+            ${{ github.workspace }}/target/ExtentReport.html
