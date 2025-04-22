@@ -1,64 +1,127 @@
 
 
-name: Run BDD RestAssured Tests
+# name: Run BDD RestAssured Tests
  
-on:
+# on:
 
-  push:
+#   push:
 
-    branches: [ master ]
+#     branches: [ master ]
 
-  pull_request:
+#   pull_request:
 
-    branches: [ master ]
+#     branches: [ master ]
  
-jobs:
+# jobs:
 
-  test:
+#   test:
 
-    runs-on: ubuntu-latest
+#     runs-on: ubuntu-latest
  
-    steps:
+#     steps:
 
-      - name: Checkout code
+#       - name: Checkout code
 
-        uses: actions/checkout@v3
+#         uses: actions/checkout@v3
  
-      - name: Set up Java
+#       - name: Set up Java
 
-        uses: actions/setup-java@v3
+#         uses: actions/setup-java@v3
 
-        with:
+#         with:
 
-          java-version: '17'
+#           java-version: '17'
 
-          distribution: 'temurin'
+#           distribution: 'temurin'
  
-      - name: Cache Maven packages
+#       - name: Cache Maven packages
 
-        uses: actions/cache@v3
+#         uses: actions/cache@v3
 
-        with:
+#         with:
 
-          path: ~/.m2
+#           path: ~/.m2
 
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+#           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
-          restore-keys: ${{ runner.os }}-maven-
+#           restore-keys: ${{ runner.os }}-maven-
  
-      - name: Build and test with Maven
+#       - name: Build and test with Maven
 
-        run: mvn clean test
+#         run: mvn clean test
         
 
       
+#       - name: Build and test with Maven
+#         run: mvn clean test
+
+#       - name: List generated Extent Report
+#         run: |
+#           echo "Listing files in target directory:"
+#           ls -la "${{ github.workspace }}/target"
+
+#       - name: Send email notification
+#         if: failure()
+#         uses: dawidd6/action-send-mail@v3
+#         with:
+#           server_address: smtp.gmail.com
+#           server_port: 587
+#           username: ${{ secrets.GMAIL_USERNAME }}
+#           password: ${{ secrets.GMAIL_PASSWORD }}
+#           subject: "Test Failed - Extent Report Attached"
+#           body: |
+#             Hello Developer,
+
+#             One or more tests have failed during the GitHub Actions workflow.
+
+#             Please review the attached Extent Report for more information.
+
+#             Regards,  
+#             GitHub Actions
+#           to: ${{ secrets.DEVELOPER_EMAIL }}
+#           from: ${{ secrets.GMAIL_USERNAME }}
+#           attachments: |
+#             ${{ github.workspace }}/target/ExtentReport.html
+
+
+
+
+name: Run BDD RestAssured Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+
       - name: Build and test with Maven
         run: mvn clean test
 
       - name: List generated Extent Report
         run: |
-          echo "Listing files in target directory:"
-          ls -la "${{ github.workspace }}/target"
+          echo "Listing files in ExtentReports directory:"
+          ls -la "${{ github.workspace }}/target/ExtentReports"
 
       - name: Send email notification
         if: failure()
@@ -81,4 +144,5 @@ jobs:
           to: ${{ secrets.DEVELOPER_EMAIL }}
           from: ${{ secrets.GMAIL_USERNAME }}
           attachments: |
-            ${{ github.workspace }}/target/ExtentReport.html
+            ${{ github.workspace }}/target/ExtentReports/ExtentReport.html
+
