@@ -140,8 +140,8 @@
           <useModulePath>false</useModulePath> <!-- Important for JUnit 5 + Cucumber -->
         </configuration>
       </plugin>
-    </plugins>
-	  <plugins>
+    
+	  
 <!-- Single Surefire plugin declaration -->
 <plugin>
 <groupId>org.apache.maven.plugins</groupId>
@@ -157,7 +157,7 @@
 </configuration>
 </plugin>
 </plugins>
-  </build>
+  
 	
 
 </project>
