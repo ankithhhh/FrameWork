@@ -1,31 +1,28 @@
 package runners;
 
-import org.junit.platform.suite.api.IncludeEngines;
+import io.cucumber.testng.AbstractTestNGCucumberTests;
+import io.cucumber.testng.CucumberOptions;
+import org.testng.annotations.DataProvider;
 
-import org.junit.platform.suite.api.SelectClasspathResource;
-import org.junit.platform.suite.api.Suite;
-import org.junit.platform.suite.api.ConfigurationParameter;
+@CucumberOptions(
+    features = {
+        "src/test/resources/features/Second/PostReqs.feature",
+        "src/test/resources/features/Second/GetReqs.feature"
+        // Add others here if needed
+    },
+    glue = {"steps", "hooks"},
+    plugin = {
+        "pretty",
+        "html:target/cucumber-reports.html",
+        "json:target/cucumber-reports.json"
+    },
+    publish = true
+)
+public class SecondTest extends AbstractTestNGCucumberTests {
 
-import static io.cucumber.junit.platform.engine.Constants.*;
-
-//@Suite
-//@IncludeEngines("cucumber")
-//@SelectClasspathResource("features/Second/PostReqs.feature")
-//@SelectClasspathResource("features/Second/GetReq.feature")
-//@SelectClasspathResource("features/Second/PutReq.feature")
-//@SelectClasspathResource("features/Second/DeleteReq.feature")
-//
-//@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "steps,hooks") 
-//@ConfigurationParameter(key = "cucumber.plugin", value = "pretty, html:target/cucumber-reports.html, json:target/cucumber-reports.json")
-//@ConfigurationParameter(key = "cucumber.publish", value = "true")
-//public class SecondRunner {
-//}
-@Suite
-@IncludeEngines("cucumber")
-@SelectClasspathResource("features/Second/PostReqs.feature")
-@SelectClasspathResource("features/Second/GetReqs.feature")
-@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "steps,hooks")
-@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty, html:target/cucumber-reports.html, json:target/cucumber-reports.json")
-@ConfigurationParameter(key = "cucumber.publish", value = "true")
-public class SecondTest {
+    @Override
+    @DataProvider(parallel = true)
+    public Object[][] scenarios() {
+        return super.scenarios();
+    }
 }
